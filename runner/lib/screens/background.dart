@@ -1,7 +1,11 @@
 import 'dart:math';
+import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/parallax.dart'; 
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:runner/constants/image_constant.dart';
 
 class BackGroundScreen  extends ParallaxComponent {
   BackGroundScreen({required this.speed}); 
@@ -26,7 +30,7 @@ class BackGroundScreen  extends ParallaxComponent {
       layers,
       baseVelocity: baseVelocity,
       velocityMultiplierDelta: velocityMultiplierDelta,
-      FilterQuality: FilterQuality.none,
+      filterQuality: FilterQuality.none,
     );
     return super.onLoad();
   }

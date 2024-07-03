@@ -1,36 +1,57 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:runner/models/player_data.dart';
 import 'package:runner/screens/endless_runner.dart';
 
-class Dino extends SpriteAnimationGroupComponent<DinoAnimationStates> with CollisionCallbacks, HasGameReference<EndlessRunner> {
+enum  DinoAnimationStates {
+  idle,
+  run,
+  kick,
+  jump,
+  hit,
+  sprint,
+}
+
+class Dino extends SpriteAnimationComponent<DinoAnimationStates> with CollisionCallback, HasGameReference<EndlessRunner> {
   static final _animationMap = {
     DinoAnimationStates.idle: SpriteAnimationData.sequenced(
-      amount: 4,
-      stepTime: 0.1,
+      amount: 4, 
+      stepTime: 0.1, 
       textureSize: Vector2.all(24),
-    ),
-    DinoAnimationStates.run: SpriteAnimationData.sequenced(
-      amount: 6,
-      stepTime: 0.1,
-      textureSize: Vector2.all(24),
-      texturePosition: Vector2((4)* 24, 0),
-    ),
-    DinoAnimationStates.hit: SpriteAnimationData.sequenced(
-      amount: 3,
-      stepTime: 0.1,
-      textureSize: Vector2.all(24),
-      texturePosition: Vector2((14)* 24, 0),
-    ),
-  };
-  double yMax = 0.0; 
-  double speedY = 0.0; 
-  static const double gravity = 800; 
-  final Timer _hitTimer = Timer(1);
-  bool isHit = false; 
+      ),
 
-  Dino(Image image, playerData)
-    : super.fromFrameData(image, _animationMap);
+    DinoAnimationStates.run: SpriteAnimationData.sequenced(
+      amount: 6, 
+      stepTime: 0.1, 
+      textureSize: Vector2.all(24),
+      texturePosition: Vector2((4) * 24, 0),
+      ),
+
+    DinoAnimationStates.hit: SpriteAnimationData.sequenced(
+      amount: 3, 
+      stepTime: 0.1, 
+      textureSize: Vector2.all(24),
+      texturePosition: Vector2((4 + 6 + 4) * 24, 0),
+      ),
+
+    DinoAnimationStates.sprint: SpriteAnimationData.sequenced(
+      amount: 7, 
+      stepTime: 0.1, 
+      textureSize: Vector2.all(24),
+      texturePosition: Vector2((4 + 6 + 4 + 3) * 24, 0),
+      ),
+  };
+
+  double yMax = 0;
+  double speedY = 0;
+  final Timer _timer = Timer(1);
+  static const double gravity = 800;
+  final PlayerData playerData; 
+  bool isHit = false;
+
+  Dino(Image image, this.playerData)
+    :super.fromFrameData(image, _animationMap);
 
   @override
   void onMount() {
@@ -44,14 +65,15 @@ class Dino extends SpriteAnimationGroupComponent<DinoAnimationStates> with Colli
         ),
     );
     yMax = y;
+    
     _hitTimer.onTick = () {
       current = DinoAnimationStates.run;
       isHit = false; 
     };
-
     super.onMount(); 
   }
-  bool get isOnGround => (y >= yMax);
+
+  //bool get isOnGround => (y >= yMax);
 
   @override
   void update(double dt) {
@@ -71,17 +93,6 @@ class Dino extends SpriteAnimationGroupComponent<DinoAnimationStates> with Colli
   _hitTimer.update(dt);
   super.update(dt); 
 }
-  void _reset() {
-    if (isMounted) {
-      removeFromParent();
-    }
-    anchor = Anchor.bottomLeft;
-    position = Vector2(32, game.virtualSize.y - 10);
-    size = Vector2.all(24);
-    current = DinoAnimationStates.run;
-    isHit = false;
-    speedY = 0.0;
-  }
 
 @override 
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
@@ -103,5 +114,17 @@ class Dino extends SpriteAnimationGroupComponent<DinoAnimationStates> with Colli
       speedY = -300;
       current = DinoAnimationStates.idle; 
     }
+  }
+
+  void _reset() {
+    if (isMounted) {
+      removeFromParent();
+    }
+    anchor = Anchor.bottomLeft;
+    position = Vector2(32, game.virtualSize.y - 10);
+    size = Vector2.all(24);
+    current = DinoAnimationStates.run;
+    isHit = false;
+    speedY = 0.0;
   }
 }
