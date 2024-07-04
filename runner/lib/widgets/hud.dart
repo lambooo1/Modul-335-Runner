@@ -1,9 +1,9 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:runner/models/player_data.dart';
 import 'package:runner/screens/endless_runner.dart';
+import 'package:runner/widgets/pause_menu.dart';
 
 class Hud extends StatelessWidget {
   static const id = 'Hud';
@@ -15,7 +15,7 @@ class Hud extends StatelessWidget {
     return ChangeNotifierProvider.value(
       value: game.playerData,
       child: Padding(
-        padding: const EdgeInsets.only(10.0),
+        padding: const EdgeInsets.only(top: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,7 +24,7 @@ class Hud extends StatelessWidget {
               children: [
                 Selector<PlayerData, int>(
                   selector: (_, playerData) => playerData.currentScore,
-                  builder: (_, score, _) {
+                  builder: (_, score, __) {
                     return Text(
                       'Score: $score', 
                       style: const TextStyle(fontSize: 20, color: Colors.white),
@@ -33,7 +33,7 @@ class Hud extends StatelessWidget {
                 ),
                 Selector<PlayerData, int>(
                   selector: (_, playData) => playData.highScore,
-                  builder: (_, highScore, _) {
+                  builder: (_, highScore, __) {
                     return Text(
                       'High Score: $highScore', 
                       style: const TextStyle(fontSize: 20, color: Colors.white),
@@ -51,7 +51,7 @@ class Hud extends StatelessWidget {
                 child: const Icon(Icons.pause, color: Colors.white),
                 ),
               Selector<PlayerData, int>(
-                selector: (_, playerData) => playerData.lives
+                selector: (_, playerData) => playerData.lives,
                 builder: (_, lives, __) {
                   return Row(
                     children: List.generate(5, (index) {
