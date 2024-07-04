@@ -16,17 +16,23 @@ class EnemyManager extends Component with HasGameRef<EndlessRunner> {
   }
 
   void spawnRandomEnemy() {
+    if (_data.isEmpty) {
+      print('Enemy data is empty. No enemies to spawn.');
+      return;
+    }
+
     final randomIndex = _random.nextInt(_data.length);
     final enemyData = _data.elementAt(randomIndex);
     final enemy = Enemy(enemyData);
     
+    enemy.anchor = Anchor.bottomLeft;
     enemy.position = Vector2(
       game.virtualSize.x + 32,
       game.virtualSize.y - 12,
     );
 
     if (enemyData.canFly) {
-      final newHeight = _random.nextDouble() * 2 * game.virtualSize.y;
+      final newHeight = _random.nextDouble() * 2 * enemyData.textureSize.y;
       enemy.position.y -= newHeight;
     }
 
@@ -53,9 +59,9 @@ class EnemyManager extends Component with HasGameRef<EndlessRunner> {
         EnemyData(
           image: game.images.fromCache(ImageConstants.vulture),
           nFrames: 6,
-          stepTime: 0.09,
+          stepTime: 0.1,
           textureSize: Vector2(48, 48),
-          speedX: 150,
+          speedX: 100,
           canFly: true,
         ),
         EnemyData(

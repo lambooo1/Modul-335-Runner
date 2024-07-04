@@ -3,17 +3,19 @@ import 'package:flame/components.dart';
 import 'package:runner/models/enemy_data.dart';
 import 'package:runner/screens/endless_runner.dart';
 
-class Enemy extends SpriteAnimationComponent with CollisionCallbacks, HasGameReference<EndlessRunner> {
-  final EnemyData enemyData; 
-  Enemy(this.enemyData){
+class Enemy extends SpriteAnimationComponent
+    with CollisionCallbacks, HasGameReference<EndlessRunner> {
+  final EnemyData enemyData;
+
+  Enemy(this.enemyData) {
     animation = SpriteAnimation.fromFrameData(
-      enemyData.image, 
+      enemyData.image,
       SpriteAnimationData.sequenced(
-        amount: enemyData.nFrames, 
-        stepTime: enemyData.stepTime, 
+        amount: enemyData.nFrames,
+        stepTime: enemyData.stepTime,
         textureSize: enemyData.textureSize,
       ),
-    ); 
+    );
   }
 
   @override
@@ -32,9 +34,9 @@ class Enemy extends SpriteAnimationComponent with CollisionCallbacks, HasGameRef
 
   @override
   void update(double dt) {
-    position.x = enemyData.speedX * dt;
+    position.x -= enemyData.speedX * dt;
 
-    if (position.x < enemyData.textureSize.x) {
+    if (position.x < -enemyData.textureSize.x) {
       removeFromParent();
       if (game.playerData.lives == 5) {
         game.playerData.currentScore += 150;
@@ -48,6 +50,7 @@ class Enemy extends SpriteAnimationComponent with CollisionCallbacks, HasGameRef
         game.playerData.currentScore += 750;
       }
     }
+
     super.update(dt);
   }
 }

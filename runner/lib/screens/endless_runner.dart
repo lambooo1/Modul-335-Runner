@@ -13,15 +13,34 @@ import 'package:runner/widgets/pause_menu.dart';
 import 'package:runner/screens/enemy_manager.dart';
 
 
-
 class EndlessRunner extends FlameGame with TapDetector, HasCollisionDetection {
   EndlessRunner({super.camera});
 
+  Future<void> loadAssets() async{
+    await images.loadAll([
+      ImageConstants.layer0,
+      ImageConstants.layer1,
+      ImageConstants.layer2,
+      ImageConstants.layer3,
+      ImageConstants.layer4,
+      ImageConstants.layer5,
+      ImageConstants.layer6,
+      ImageConstants.layer7,
+      ImageConstants.layer8,
+      ImageConstants.layer9,
+      ImageConstants.light,
+      ImageConstants.hyena,
+      ImageConstants.vulture,
+      ImageConstants.dino,
+      ImageConstants.scorpio,
+    ]);
+  }
+
   static const _imageAssets = [
-    'imageConstants.dino',
-    'imageConstants.hyena',
-    'imageConstants.vulture',
-    'imageConstants.scoprio',
+    'dino.png',
+    'hyena.png',
+    'vulture.png',
+    'scorpio.png',
   ];
 
   late Dino _dino;
@@ -32,6 +51,7 @@ class EndlessRunner extends FlameGame with TapDetector, HasCollisionDetection {
 
   @override
   Future<void> onLoad() async {
+    await loadAssets();
     await Flame.device.fullScreen(); 
     await Flame.device.setLandscape(); 
     
