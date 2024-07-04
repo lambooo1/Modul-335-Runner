@@ -8,7 +8,7 @@ class PlayerDataAdapter extends TypeAdapter<PlayerData> {
   PlayerData read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i+++) reader.readByte(): reader.read(),
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return PlayerData()..highScore = fields[1] as int;
   }
@@ -22,6 +22,7 @@ class PlayerDataAdapter extends TypeAdapter<PlayerData> {
   }
 
   @override
+  // ignore: hash_and_equals
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is PlayerDataAdapter &&

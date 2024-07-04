@@ -2,13 +2,15 @@ import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/image.dart';
 import 'package:hive/hive.dart';
 import 'package:runner/constants/image_constant.dart';
 import 'package:runner/models/player_data.dart';
 import 'package:runner/screens/background.dart';
-import 'package:runner/models/player.dart';
-import 'package:lifecycle/lifecycle.dart';
+import 'package:runner/screens/dino.dart';
+import 'package:runner/widgets/game_over_menu.dart';
+import 'package:runner/widgets/hud.dart';
+import 'package:runner/widgets/pause_menu.dart';
+import 'package:runner/screens/enemy_manager.dart';
 
 
 
@@ -33,7 +35,7 @@ class EndlessRunner extends FlameGame with TapDetector, HasCollisionDetection {
     await Flame.device.fullScreen(); 
     await Flame.device.setLandscape(); 
     
-    PlayerData = await _readPlayerData();
+    playerData = await _readPlayerData();
     
     await images.loadAll(_imageAssets);
     camera.viewfinder.position = camera.viewport.virtualSize * 0.5; 
@@ -41,7 +43,7 @@ class EndlessRunner extends FlameGame with TapDetector, HasCollisionDetection {
   }
 
   void startGamePlay() {
-    _dino = Dino(images.fromCache(ImageConstant.dino) playerData);
+    _dino = Dino(images.fromCache(ImageConstants.dino), playerData);
     _enemyManager = EnemyManager();
 
     world.add(_dino);
@@ -54,7 +56,7 @@ class EndlessRunner extends FlameGame with TapDetector, HasCollisionDetection {
     _enemyManager.removeFromParent();
   }
 
-  void _reset() {
+  void reset() {
     _disconnectActors();
     playerData.currentScore = 0;
     playerData.lives = 5;
@@ -89,18 +91,18 @@ class EndlessRunner extends FlameGame with TapDetector, HasCollisionDetection {
   }
 
   @override
-  void lifecycleStateChange(AppLifecycleListener state) {
+  void lifecycleStateChange(AppLifecycleState state) {
     switch (state) {
-      case AppLifecycleListener.resumed:
+      case AppLifecycleState.resumed:
         if (!(overlays.isActive(PauseMenu.id)) &&
             !(overlays.isActive(GameOverMenu.id))) {
           resumeEngine();
         }
         break;
-      case AppLifecycleListener.paused:
-      case AppLifecycleListener.detached:
-      case AppLifecycleListener.inactive:
-      case AppLifecycleListener.hidden: 
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.hidden: 
         if (overlays.isActive(Hud.id)) {
           overlays.remove(Hud.id);
           overlays.add(PauseMenu.id);

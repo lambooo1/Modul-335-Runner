@@ -1,8 +1,10 @@
+import 'dart:ui' as ui;
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
 import 'package:runner/models/player_data.dart';
 import 'package:runner/screens/endless_runner.dart';
+import 'package:runner/screens/enemy.dart';
 
 enum  DinoAnimationStates {
   idle,
@@ -13,7 +15,7 @@ enum  DinoAnimationStates {
   sprint,
 }
 
-class Dino extends SpriteAnimationComponent<DinoAnimationStates> with CollisionCallback, HasGameReference<EndlessRunner> {
+class Dino extends SpriteAnimationGroupComponent<DinoAnimationStates> with CollisionCallbacks, HasGameReference<EndlessRunner> {
   static final _animationMap = {
     DinoAnimationStates.idle: SpriteAnimationData.sequenced(
       amount: 4, 
@@ -43,15 +45,15 @@ class Dino extends SpriteAnimationComponent<DinoAnimationStates> with CollisionC
       ),
   };
 
-  double yMax = 0;
-  double speedY = 0;
-  final Timer _timer = Timer(1);
+  double yMax = 0.0;
+  double speedY = 0.0;
+  final Timer _hitTimer = Timer(1);
   static const double gravity = 800;
   final PlayerData playerData; 
   bool isHit = false;
 
-  Dino(Image image, this.playerData)
-    :super.fromFrameData(image, _animationMap);
+  Dino(ui.Image image, this.playerData)
+    : super.fromFrameData(image, _animationMap);
 
   @override
   void onMount() {
@@ -73,8 +75,6 @@ class Dino extends SpriteAnimationComponent<DinoAnimationStates> with CollisionC
     super.onMount(); 
   }
 
-  //bool get isOnGround => (y >= yMax);
-
   @override
   void update(double dt) {
     speedY += gravity * dt;
@@ -94,13 +94,15 @@ class Dino extends SpriteAnimationComponent<DinoAnimationStates> with CollisionC
   super.update(dt); 
 }
 
-@override 
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if ((other is Enemy) && (!isHit)) {
-      hit();
+  @override 
+    void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+      if ((other is Enemy) && (!isHit)) {
+        hit();
+      }
+      super.onCollision(intersectionPoints, other);
     }
-    super.onCollision(intersectionPoints, other);
-  }
+
+  bool get isOnGround => (y >= yMax);
 
   void hit() {
     isHit = true;

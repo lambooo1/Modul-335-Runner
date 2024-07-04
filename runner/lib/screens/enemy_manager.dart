@@ -6,12 +6,12 @@ import 'package:runner/models/enemy_data.dart';
 import 'package:runner/screens/endless_runner.dart';
 import 'package:runner/screens/enemy.dart';
 
-class Enemymanager extends Component with HasGameRef<EndlessRunner> {
+class EnemyManager extends Component with HasGameRef<EndlessRunner> {
   final List<EnemyData> _data = [];
   final Random _random = Random();
   final Timer _timerStart = Timer(2, repeat: true);
 
-  Enemymanager() {
+  EnemyManager() {
     _timerStart.onTick = spawnRandomEnemy;
   }
 
@@ -43,7 +43,7 @@ class Enemymanager extends Component with HasGameRef<EndlessRunner> {
     if (_data.isEmpty) {
       _data.addAll([
         EnemyData(
-          image: game.images.fromCache(ImageConstant.scorpio),
+          image: game.images.fromCache(ImageConstants.scorpio),
           nFrames: 4,
           stepTime: 0.1,
           textureSize: Vector2(48, 48),
@@ -51,7 +51,7 @@ class Enemymanager extends Component with HasGameRef<EndlessRunner> {
           canFly: false,
         ),
         EnemyData(
-          image: game.images.fromCache(ImageConstant.vulture),
+          image: game.images.fromCache(ImageConstants.vulture),
           nFrames: 6,
           stepTime: 0.09,
           textureSize: Vector2(48, 48),
@@ -59,7 +59,7 @@ class Enemymanager extends Component with HasGameRef<EndlessRunner> {
           canFly: true,
         ),
         EnemyData(
-          image: game.images.fromCache(ImageConstant.hyena),
+          image: game.images.fromCache(ImageConstants.hyena),
           nFrames: 6,
           stepTime: 0.09,
           textureSize: Vector2(48, 48),

@@ -1,12 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:runner/models/player_data.dart';
 import 'package:runner/screens/endless_runner.dart';
 import 'package:runner/widgets/hud.dart';
+import 'package:runner/widgets/main_menu.dart';
 
 class GameOverMenu extends StatelessWidget {
   static const id = 'GameOverMenu';
@@ -38,7 +37,7 @@ class GameOverMenu extends StatelessWidget {
                     ),
                     Selector<PlayerData, int>(
                       selector: (_, playerData) => playerData.currentScore,
-                      builer: (_, score, __) {
+                      builder: (_, score, __) {
                         return Text(
                           'Your Score: $score',
                           style: const TextStyle(
