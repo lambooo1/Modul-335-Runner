@@ -1,4 +1,4 @@
-class ImageConstant {
+class ImageConstants {
   static const String layer0 = 'layer_0.png';
   static const String layer1 = 'layer_1.png';
   static const String layer2 = 'layer_2.png';

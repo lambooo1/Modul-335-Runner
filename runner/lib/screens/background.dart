@@ -10,6 +10,7 @@ import 'package:runner/constants/image_constant.dart';
 class BackGroundScreen  extends ParallaxComponent {
   BackGroundScreen({required this.speed}); 
   final double speed; 
+
   @override
   Future<void> onLoad() async {
     final layers = [
@@ -24,7 +25,7 @@ class BackGroundScreen  extends ParallaxComponent {
       ParallaxImageData(ImageConstants.layer8),
       ParallaxImageData(ImageConstants.layer9),
     ];
-    final baseVelocity = Vector2(speed, pow(2, layers.length), 0);
+    final baseVelocity = Vector2(speed / pow(2, layers.length), 0);
     final velocityMultiplierDelta = Vector2(2.0, 0.0);
     parallax = await game.loadParallax(
       layers,
