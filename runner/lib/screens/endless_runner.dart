@@ -11,6 +11,7 @@ import 'package:runner/widgets/game_over_menu.dart';
 import 'package:runner/widgets/hud.dart';
 import 'package:runner/widgets/pause_menu.dart';
 import 'package:runner/screens/enemy_manager.dart';
+import 'package:vibration/vibration.dart';
 
 
 class EndlessRunner extends FlameGame with TapDetector, HasCollisionDetection {
@@ -83,11 +84,16 @@ class EndlessRunner extends FlameGame with TapDetector, HasCollisionDetection {
   }
 
   @override
-  void update(double dt) {
+  void update(double dt) async {
     if (playerData.lives <= 0) {
-      overlays.add(GameOverMenu.id);
-      overlays.remove(Hud.id);
-      pauseEngine();
+      if (!overlays.isActive(GameOverMenu.id)) {
+        overlays.add(GameOverMenu.id);
+        overlays.remove(Hud.id);
+        pauseEngine();
+        if (await Vibration.hasVibrator() ?? false) {
+          Vibration.vibrate(duration: 500);
+        }
+      }
     }
     super.update(dt);
   }
