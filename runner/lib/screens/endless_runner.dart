@@ -12,6 +12,7 @@ import 'package:runner/widgets/hud.dart';
 import 'package:runner/widgets/pause_menu.dart';
 import 'package:runner/screens/enemy_manager.dart';
 import 'package:vibration/vibration.dart';
+import 'package:flame_audio/flame_audio.dart';
 
 
 class EndlessRunner extends FlameGame with TapDetector, HasCollisionDetection {
@@ -35,6 +36,7 @@ class EndlessRunner extends FlameGame with TapDetector, HasCollisionDetection {
       ImageConstants.dino,
       ImageConstants.scorpio,
     ]);
+    await FlameAudio.audioCache.load('game_over.mp3');
   }
 
   static const _imageAssets = [
@@ -93,6 +95,7 @@ class EndlessRunner extends FlameGame with TapDetector, HasCollisionDetection {
         if (await Vibration.hasVibrator() ?? false) {
           Vibration.vibrate(duration: 500);
         }
+        FlameAudio.play('game_over.mp3');
       }
     }
     super.update(dt);

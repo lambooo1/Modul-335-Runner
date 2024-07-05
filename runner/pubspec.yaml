@@ -40,6 +40,7 @@ dependencies:
   flame: ^1.18.0
   lifecycle: any
   vibration:
+  flame_audio:
 
 dev_dependencies:
   hive_generator:
